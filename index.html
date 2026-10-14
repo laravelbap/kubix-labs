@@ -1,26 +1,406 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kubix Labs</title>
-  <style>
-    :root { color-scheme: light dark; --fg: #11181C; --muted: #60646C; --bg: #F7F4F2; --accent: #C43E12; }
-    @media (prefers-color-scheme: dark) { :root { --fg: #F2F3F5; --muted: #A0A4AA; --bg: #0D0B0A; --accent: #FF6A3D; } }
-    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
-    a { color: var(--accent); }
-    .muted { color: var(--muted); }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kubix Labs</title>
+<meta name="description" content="Kubix Labs — niezależne studio gier przeglądarkowych. 8 gier: bijatyki, RTS, RPG i symulatory. Grasz za darmo w przeglądarce.">
+<meta property="og:title" content="Kubix Labs">
+<meta property="og:description" content="8 gier przeglądarkowych od Kubix Labs. Bez instalacji, bez konta.">
+<meta property="og:image" content="img/poster.jpg">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: an indie studio's shelf — wordmark bar, highlighted headline, the studio reel, a 4-up cartridge shelf of games, a spec sheet. */
+:root {
+  --paper: #ECEEF3;
+  --card: #F8F9FB;
+  --ink: #151A2E;
+  --muted: #565E76;
+  --line: #C8CEDD;
+  --marker: #F5C518;
+  --marker-ink: #151A2E;
+  --link: #2448E0;
+  --live: #17834B;
+  --live-bg: #D8F1E2;
+  --pending: #8A5F00;
+  --pending-bg: #FBEFC9;
+  --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10131F; --card: #181C2B; --ink: #E7EAF3; --muted: #9AA1B8; --line: #2C3249;
+    --marker: #E9B90F; --marker-ink: #10131F; --link: #93A9FF;
+    --live: #5DD898; --live-bg: #12301F; --pending: #EDBE4C; --pending-bg: #33290F; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10131F; --card: #181C2B; --ink: #E7EAF3; --muted: #9AA1B8; --line: #2C3249;
+  --marker: #E9B90F; --marker-ink: #10131F; --link: #93A9FF;
+  --live: #5DD898; --live-bg: #12301F; --pending: #EDBE4C; --pending-bg: #33290F; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font: 16px/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1160px; margin: 0 auto; }
+a { color: var(--link); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+.label { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 22px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; font: 800 20px/1 var(--display); letter-spacing: -.01em; color: var(--ink); text-decoration: none; }
+.cube { width: 22px; height: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.cube i { background: var(--ink); border-radius: 2px; }
+.cube i:nth-child(2) { background: var(--marker); }
+.top nav { display: flex; gap: 22px; flex-wrap: wrap; }
+.top nav a { color: var(--ink); text-decoration: none; font-weight: 500; }
+.top nav a:hover { text-decoration: underline; }
+.top nav { align-items: center; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+.lang button { font: 600 12px/1 var(--mono); letter-spacing: .06em; border: 0; background: transparent; color: var(--muted); padding: 7px 10px; border-radius: 999px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+/* hero */
+.hero { padding-block: 56px 28px; display: grid; gap: 18px; }
+.hero h1 { font-size: clamp(40px, 7.2vw, 92px); line-height: .98; letter-spacing: -.035em; font-weight: 800; max-width: 14ch; }
+.hl { background: linear-gradient(transparent 12%, var(--marker) 12%, var(--marker) 88%, transparent 88%); color: var(--marker-ink); padding: 0 .08em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.hero p { max-width: 60ch; font-size: 18px; color: var(--muted); margin: 0; }
+.facts { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 6px; }
+.facts div { display: grid; gap: 2px; }
+.facts b { font: 800 30px/1 var(--display); font-variant-numeric: tabular-nums; }
+.facts span { font-size: 13px; color: var(--muted); }
+
+/* trailer */
+.trailer { display: grid; gap: 12px; padding-block: 12px 56px; }
+.screen { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 14px; overflow: hidden; background: #0B1022; box-shadow: 0 1px 0 var(--line), 0 24px 48px -28px rgba(10, 14, 30, .55); }
+.screen video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #0B1022; }
+.trailer .under { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
+
+/* sections */
+section.block { padding-block: 56px; border-top: 1px solid var(--line); display: grid; gap: 24px; }
+.block-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.block-head h2 { font-size: clamp(30px, 4.4vw, 46px); letter-spacing: -.03em; line-height: 1; }
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip-btn { font: 500 14px/1 var(--body); padding: 9px 13px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.chip-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* game shelf */
+.games { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 1000px) { .games { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .games { grid-template-columns: 1fr; } }
+.game { background: var(--card); border: 1px solid var(--line); border-radius: 12px; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; min-width: 0; }
+.game img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #0B1022; border-bottom: 1px solid var(--line); }
+.game .body { padding: 16px 16px 4px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.game .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.game h3 { font-size: 22px; letter-spacing: -.015em; line-height: 1.1; }
+.game p { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.5; }
+.tags { display: flex; gap: 5px; flex-wrap: wrap; padding: 0; margin: 2px 0 0; list-style: none; }
+.tags li { font: 500 11.5px/1 var(--mono); border: 1px solid var(--line); border-radius: 5px; padding: 5px 6px; }
+.status { font: 600 11px/1 var(--mono); display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border-radius: 5px; white-space: nowrap; background: var(--pending-bg); color: var(--pending); }
+.status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status.live { background: var(--live-bg); color: var(--live); }
+.game .foot { padding: 14px 16px 16px; display: grid; gap: 8px; }
+.url { font: 12px/1.3 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.btn { font: 600 14px/1 var(--body); padding: 11px 14px; border-radius: 999px; text-decoration: none; text-align: center; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
+.btn[aria-disabled="true"] { background: transparent; color: var(--muted); border-color: var(--line); cursor: not-allowed; }
+
+/* tech */
+.tech { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: start; }
+@media (max-width: 900px) { .tech { grid-template-columns: 1fr; } }
+.tech-intro { display: grid; gap: 16px; min-width: 0; }
+.tech-intro p { margin: 0; max-width: 52ch; }
+.stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.stack div { background: var(--card); padding: 14px 16px; display: grid; gap: 4px; min-width: 0; }
+.stack b { font: 600 15px/1.3 var(--body); }
+.stack span { font-size: 13.5px; color: var(--muted); }
+.specs-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); min-width: 0; }
+table.specs { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
+.specs th, .specs td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.specs thead th { font: 600 11px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.specs tbody th { font-weight: 600; white-space: nowrap; }
+.specs td { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.specs tr:last-child th, .specs tr:last-child td { border-bottom: 0; }
+
+/* footer */
+footer { border-top: 1px solid var(--line); padding-block: 32px 48px; display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
+footer ul { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 4px; }
+.email { font-family: var(--mono); color: var(--ink); user-select: all; }
+</style>
 </head>
 <body>
-<main>
-  <h1>Kubix Labs</h1>
-  <h2>Interval Timer Max</h2>
-  <p><a href="interval-timer-max/privacy-policy/">Privacy Policy / Polityka prywatności</a></p>
-  <h2>Learn Times Tables</h2>
-  <p><a href="learn-times-tables/privacy-policy/">Privacy Policy / Polityka prywatności</a></p>
-  <p class="muted">Contact: <a href="mailto:haniogames@gmail.com">haniogames@gmail.com</a></p>
-</main>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top" aria-label="Kubix Labs"><span class="cube" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Kubix Labs</a>
+    <nav aria-label="Sekcje">
+      <a href="#trailer" data-i18n="nav_trailer">Trailer</a>
+      <a href="#gry" data-i18n="nav_games">Gry</a>
+      <a href="#technologia" data-i18n="nav_tech">Technologia</a>
+      <div class="lang" role="group" aria-label="Język / Language">
+        <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <span class="label" data-i18n="eyebrow">Niezależne studio gier przeglądarkowych</span>
+      <h1 data-i18n-html="hero_h1">Gry, które odpalasz <span class="hl">w jednej karcie.</span></h1>
+      <p data-i18n="hero_p">Od bijatyki na sali plenarnej po lot w oko huraganu. Każda gra działa w przeglądarce na komputerze i większość na telefonie. Bez instalacji, bez konta, za darmo.</p>
+      <div class="facts">
+        <div><b>8</b><span data-i18n="f_games">gier</span></div>
+        <div><b>0 MB</b><span data-i18n="f_dl">do pobrania</span></div>
+        <div><b>PL / EN</b><span data-i18n="f_lang">wersje językowe</span></div>
+      </div>
+    </div>
+
+    <section class="trailer" id="trailer" aria-label="Trailer">
+      <div class="screen">
+        <video id="trailer-video" controls playsinline muted preload="metadata" poster="img/poster.jpg" src="trailer-pl.mp4"></video>
+      </div>
+      <div class="under"><span data-i18n="tr_cap">Trailer studia · 0:35 · nagrania z rozgrywki</span><a href="#gry" data-i18n="tr_go">Przejdź do gier</a></div>
+    </section>
+
+    <section class="block" id="gry">
+      <div class="block-head">
+        <h2 data-i18n="h_games">Gry</h2>
+        <div class="filters" role="group" aria-label="Filtruj gry">
+          <button class="chip-btn" aria-pressed="true" data-f="all" data-i18n="f_all">Wszystkie</button>
+          <button class="chip-btn" aria-pressed="false" data-f="fight" data-i18n="f_fight">Bijatyki</button>
+          <button class="chip-btn" aria-pressed="false" data-f="rpg" data-i18n="f_rpg">Strategia i RPG</button>
+          <button class="chip-btn" aria-pressed="false" data-f="sim" data-i18n="f_sim">Symulatory</button>
+        </div>
+      </div>
+
+      <div class="games" id="games">
+        <article class="game" data-cat="rpg">
+          <img data-i18n-alt="energon-wars_alt" src="img/energon-wars.jpg" alt="Energon Wars: baza Autobotów i złoża energonu na mapie" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="energon-wars_g">RTS</span><span class="status live">online</span></div>
+            <h3>Energon Wars</h3>
+            <p data-i18n="energon-wars_p">Autoboty kontra Decepticony. Budujesz bazę, wydobywasz energon, a jednostki zmieniają się z pojazdów w roboty.</p>
+            <ul class="tags" data-i18n-html="energon-wars_t"><li>2 kampanie</li><li>16 misji</li><li>EN</li></ul>
+          </div>
+          <div class="foot"><span class="url">energon-wars.pages.dev</span><a class="btn" href="https://energon-wars.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="fight">
+          <img data-i18n-alt="sejm-kombat_alt" src="img/sejm-kombat.jpg" alt="Sejm Kombat: pojedynek na sali plenarnej z tablicą głosowań" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="sejm-kombat_g">Bijatyka</span><span class="status live">online</span></div>
+            <h3>Sejm Kombat</h3>
+            <p data-i18n="sejm-kombat_p">Posiedzenie nadzwyczajne wymyka się spod kontroli. Ośmiu posłów, ataki specjalne i dwa czytania do wygrania.</p>
+            <ul class="tags" data-i18n-html="sejm-kombat_t"><li>1–2 graczy</li><li>parodia</li><li>PL</li></ul>
+          </div>
+          <div class="foot"><span class="url">sejm-kombat.pages.dev</span><a class="btn" href="https://sejm-kombat.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="rpg">
+          <img data-i18n-alt="echoes-of-eternity_alt" src="img/echoes-of-eternity.jpg" alt="Echoes of Eternity: wioska w widoku 2.5D i okno dialogowe" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="echoes-of-eternity_g">JRPG</span><span class="status live">online</span></div>
+            <h3>Echoes of Eternity</h3>
+            <p data-i18n="echoes-of-eternity_p">Fabularne RPG z walką na paskach czasu, bitwami tytanów, 12 rozdziałami i trzema zakończeniami.</p>
+            <ul class="tags" data-i18n-html="echoes-of-eternity_t"><li>pad</li><li>20 zapisów</li><li>PL / EN</li></ul>
+          </div>
+          <div class="foot"><span class="url">echoes-of-eternity.pages.dev</span><a class="btn" href="https://echoes-of-eternity.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="rpg">
+          <img data-i18n-alt="krwawy-pakt_alt" src="img/krwawy-pakt.jpg" alt="Krwawy Pakt: ruiny kaplicy nocą, łowcy Zakonu" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="krwawy-pakt_g">Action RPG</span><span class="status live">online</span></div>
+            <h3 data-i18n="kp_title">Krwawy Pakt</h3>
+            <p data-i18n="krwawy-pakt_p">Noc w Karkonoszach. Jako świeżo przemieniony wampir polujesz na strzygi i uciekasz przed Zakonem Gromnicy.</p>
+            <ul class="tags" data-i18n-html="krwawy-pakt_t"><li>Akt I</li><li>pixel art</li><li>PL / EN</li></ul>
+          </div>
+          <div class="foot"><span class="url">krwawy-pakt.pages.dev</span><a class="btn" href="https://krwawy-pakt.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="sim">
+          <img data-i18n-alt="oko-cyklonu_alt" src="img/oko-cyklonu.jpg" alt="Oko Cyklonu: samolot meteorologiczny w chmurach huraganu" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="oko-cyklonu_g">Symulator lotu</span><span class="status live">online</span></div>
+            <h3>Oko Cyklonu</h3>
+            <p data-i18n="oko-cyklonu_p">Lecisz samolotem meteorologicznym przez huragan: pasma deszczu, ściana oka i trzy sondy do zrzucenia w środku.</p>
+            <ul class="tags" data-i18n-html="oko-cyklonu_t"><li>kat. 1–5</li><li>3D</li><li>PL</li></ul>
+          </div>
+          <div class="foot"><span class="url">oko-cyklonu.pages.dev</span><a class="btn" href="https://oko-cyklonu.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="fight">
+          <img data-i18n-alt="history-fighters_alt" src="img/history-fighters.jpg" alt="History Fighters: Juliusz Cezar w prologu kampanii" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="history-fighters_g">Bijatyka</span><span class="status live">online</span></div>
+            <h3>History Fighters</h3>
+            <p data-i18n="history-fighters_p">Turniej postaci historycznych: Napoleon, Cezar, Joanna d'Arc, Tesla i inni kontra boss Chronarch.</p>
+            <ul class="tags" data-i18n-html="history-fighters_t"><li>10 postaci</li><li>kampania</li><li>EN</li></ul>
+          </div>
+          <div class="foot"><span class="url">history-fighters.pages.dev</span><a class="btn" href="https://history-fighters.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="sim">
+          <img data-i18n-alt="blokowy-fachowiec_alt" src="img/blokowy-fachowiec.jpg" alt="Blokowy Fachowiec: menu główne gry" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="blokowy-fachowiec_g">Symulator 3D</span><span class="status live">online</span></div>
+            <h3>Blokowy Fachowiec</h3>
+            <p data-i18n="blokowy-fachowiec_p">Prowadzisz ekipę remontową na osiedlu z wielkiej płyty. Szpachla, wałek, płytki i klienci, którzy wiedzą lepiej.</p>
+            <ul class="tags" data-i18n-html="blokowy-fachowiec_t"><li>FPP</li><li>25 zleceń</li><li>PL / EN</li></ul>
+          </div>
+          <div class="foot"><span class="url">blokowy-fachowiec.pages.dev</span><a class="btn" href="https://blokowy-fachowiec.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+
+        <article class="game" data-cat="fight">
+          <img data-i18n-alt="bitka-na-kamionku_alt" src="img/bitka-na-kamionku.jpg" alt="Bitka na Kamionku: walka na podwórku między blokami" loading="lazy">
+          <div class="body">
+            <div class="row"><span class="label" data-i18n="bitka-na-kamionku_g">Bijatyka</span><span class="status live">online</span></div>
+            <h3>Bitka na Kamionku</h3>
+            <p data-i18n="bitka-na-kamionku_p">Praga-Południe, podwórko przy Kamionkowskiej. Heniek z bloku 12 kontra Zbychu z 14, a stawką jest miejsce parkingowe.</p>
+            <ul class="tags" data-i18n-html="bitka-na-kamionku_t"><li>1–2 graczy</li><li>Warszawa</li><li>PL</li></ul>
+          </div>
+          <div class="foot"><span class="url">bitka-na-kamionku.pages.dev</span><a class="btn" href="https://bitka-na-kamionku.pages.dev" target="_blank" rel="noopener" data-i18n="play">Graj</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="technologia">
+      <div class="block-head">
+        <h2 data-i18n="h_tech">Technologia</h2>
+        <span class="label" data-i18n="tech_lbl">Jak to jest zrobione</span>
+      </div>
+      <div class="tech">
+        <div class="tech-intro">
+          <p data-i18n="tech_p">Każda gra to statyczna strona: HTML, JavaScript i nic więcej. Grafika i dźwięk powstają w kodzie, więc nie ma plików do pobrania, a gra startuje w kilka sekund. Hostujemy je na Cloudflare Pages.</p>
+          <div class="stack">
+            <div><b>Canvas 2D</b><span data-i18n="st0">pixel art w bijatykach, RTS i RPG</span></div>
+            <div><b>Three.js / WebGL</b><span data-i18n="st1">gry 3D: remonty, JRPG, huragan</span></div>
+            <div><b>Web Audio</b><span data-i18n="st2">efekty i muzyka syntezowane na żywo</span></div>
+            <div><b>Cloudflare Pages</b><span data-i18n="st3">hosting i CDN dla każdej gry</span></div>
+          </div>
+        </div>
+        <div class="specs-wrap">
+          <table class="specs">
+            <thead><tr><th scope="col" data-i18n="t_game">Gra</th><th scope="col" data-i18n="t_gfx">Grafika</th><th scope="col" data-i18n="t_ctl">Sterowanie</th><th scope="col" data-i18n="t_lang">Język</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Energon Wars</th><td>Canvas 2D · TS + Vite</td><td>mysz, dotyk</td><td>EN</td></tr>
+              <tr><th scope="row">Sejm Kombat</th><td>Canvas 2D</td><td>klawiatura, dotyk</td><td>PL</td></tr>
+              <tr><th scope="row">Echoes of Eternity</th><td>Three.js r160</td><td>klawiatura, pad, dotyk</td><td>PL / EN</td></tr>
+              <tr><th scope="row" data-i18n="kp_title">Krwawy Pakt</th><td>Canvas 2D</td><td>klawiatura + mysz, dotyk</td><td>PL / EN</td></tr>
+              <tr><th scope="row">Oko Cyklonu</th><td>Three.js r128</td><td>klawiatura, pad, dotyk</td><td>PL</td></tr>
+              <tr><th scope="row">History Fighters</th><td>Canvas 2D</td><td>klawiatura, dotyk</td><td>EN</td></tr>
+              <tr><th scope="row">Blokowy Fachowiec</th><td>Three.js r169 · TS + Vite</td><td>klawiatura + mysz</td><td>PL / EN</td></tr>
+              <tr><th scope="row">Bitka na Kamionku</th><td>Canvas 2D</td><td>klawiatura, dotyk</td><td>PL</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong style="color:var(--ink)">Kubix Labs</strong>
+      <div data-i18n-html="contact">Kontakt: <span class="email">haniogames@gmail.com</span></div>
+    </div>
+    <div>
+      <span class="label" data-i18n="apps">Aplikacje mobilne</span>
+      <ul>
+        <li><a href="interval-timer-max/privacy-policy/" data-i18n="pp_itm">Interval Timer Max: polityka prywatności</a></li>
+        <li><a href="learn-times-tables/privacy-policy/" data-i18n="pp_ltt">Learn Times Tables: polityka prywatności</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const EN = {
+    nav_trailer: 'Trailer', nav_games: 'Games', nav_tech: 'Technology',
+    eyebrow: 'Independent browser game studio',
+    hero_h1: 'Games that run <span class="hl">in a single tab.</span>',
+    hero_p: 'From a brawl in the Polish parliament to a flight into the eye of a hurricane. Every game runs in a desktop browser, most on phones too. No install, no account, free.',
+    f_games: 'games', f_dl: 'to download', f_lang: 'languages',
+    tr_cap: 'Studio trailer · 0:35 · gameplay footage', tr_go: 'Go to games',
+    h_games: 'Games', f_all: 'All', f_fight: 'Fighting', f_rpg: 'Strategy & RPG', f_sim: 'Simulators',
+    online: 'online', play: 'Play',
+    'energon-wars_g': 'RTS', 'energon-wars_p': 'Autobots vs Decepticons. Build a base, harvest energon and watch units transform from vehicles into robots.',
+    'energon-wars_t': '<li>2 campaigns</li><li>16 missions</li><li>EN</li>', 'energon-wars_alt': 'Energon Wars: Autobot base and energon fields on the map',
+    'sejm-kombat_g': 'Fighting', 'sejm-kombat_p': 'An emergency sitting of the Polish parliament gets out of hand. Eight MPs, special moves and two readings to win.',
+    'sejm-kombat_t': '<li>1–2 players</li><li>parody</li><li>PL</li>', 'sejm-kombat_alt': 'Sejm Kombat: a duel in the plenary hall with the voting board',
+    'echoes-of-eternity_g': 'JRPG', 'echoes-of-eternity_p': 'A story RPG with time-bar combat, titan battles, 12 chapters and three endings.',
+    'echoes-of-eternity_t': '<li>gamepad</li><li>20 save slots</li><li>PL / EN</li>', 'echoes-of-eternity_alt': 'Echoes of Eternity: a 2.5D village and a dialogue box',
+    kp_title: 'Blood Pact',
+    'krwawy-pakt_g': 'Action RPG', 'krwawy-pakt_p': 'Night in the Karkonosze mountains. As a newly turned vampire you hunt strzygi and flee the Order of the Thunder Candle.',
+    'krwawy-pakt_t': '<li>Act I</li><li>pixel art</li><li>PL / EN</li>', 'krwawy-pakt_alt': 'Blood Pact: chapel ruins at night with Order hunters',
+    'oko-cyklonu_g': 'Flight sim', 'oko-cyklonu_p': 'Fly a weather reconnaissance plane through a hurricane: rain bands, the eyewall, and three sondes to drop in the eye.',
+    'oko-cyklonu_t': '<li>cat. 1–5</li><li>3D</li><li>PL</li>', 'oko-cyklonu_alt': 'Oko Cyklonu: a weather plane inside hurricane clouds',
+    'history-fighters_g': 'Fighting', 'history-fighters_p': 'A tournament of historical figures: Napoleon, Caesar, Joan of Arc, Tesla and more against the Chronarch boss.',
+    'history-fighters_t': '<li>10 fighters</li><li>story mode</li><li>EN</li>', 'history-fighters_alt': 'History Fighters: Julius Caesar in the campaign prologue',
+    'blokowy-fachowiec_g': '3D simulator', 'blokowy-fachowiec_p': 'Run a renovation crew on a Polish concrete-block estate. Filler, rollers, tiles and clients who always know better.',
+    'blokowy-fachowiec_t': '<li>first person</li><li>25 jobs</li><li>PL / EN</li>', 'blokowy-fachowiec_alt': 'Blokowy Fachowiec: the main menu',
+    'bitka-na-kamionku_g': 'Fighting', 'bitka-na-kamionku_p': 'A courtyard in Warsaw\'s Praga district. Heniek from block 12 against Zbychu from block 14, fighting over a parking spot.',
+    'bitka-na-kamionku_t': '<li>1–2 players</li><li>Warsaw</li><li>PL</li>', 'bitka-na-kamionku_alt': 'Bitka na Kamionku: a fight in the courtyard between apartment blocks',
+    h_tech: 'Technology', tech_lbl: 'How it is made',
+    tech_p: 'Every game is a static page: HTML, JavaScript and nothing else. Graphics and sound are generated in code, so there are no files to download and a game starts in seconds. They are hosted on Cloudflare Pages.',
+    st0: 'pixel art in the fighting games, RTS and RPGs', st1: '3D games: renovation, JRPG, hurricane', st2: 'sound effects and music synthesized live', st3: 'hosting and CDN for every game',
+    t_game: 'Game', t_gfx: 'Graphics', t_ctl: 'Controls', t_lang: 'Language',
+    apps: 'Mobile apps', pp_itm: 'Interval Timer Max: privacy policy', pp_ltt: 'Learn Times Tables: privacy policy',
+    contact: 'Contact: <span class="email">haniogames@gmail.com</span>'
+  };
+  const CELLS = { 'mysz, dotyk': 'mouse, touch', 'klawiatura, dotyk': 'keyboard, touch', 'klawiatura, pad, dotyk': 'keyboard, gamepad, touch',
+    'klawiatura + mysz, dotyk': 'keyboard + mouse, touch', 'klawiatura + mysz': 'keyboard + mouse' };
+
+  const PL = {};
+  const nodes = document.querySelectorAll('[data-i18n],[data-i18n-html],[data-i18n-alt]');
+  nodes.forEach(el => {
+    if (el.dataset.i18n) PL[el.dataset.i18n] = el.textContent;
+    if (el.dataset.i18nHtml) PL[el.dataset.i18nHtml] = el.innerHTML;
+    if (el.dataset.i18nAlt) PL[el.dataset.i18nAlt] = el.alt;
+  });
+  const cells = [...document.querySelectorAll('.specs td')].map(td => [td, td.textContent]);
+  const video = document.getElementById('trailer-video');
+
+  function apply(lang) {
+    const d = lang === 'en' ? EN : PL;
+    nodes.forEach(el => {
+      if (el.dataset.i18n && d[el.dataset.i18n] != null) el.textContent = d[el.dataset.i18n];
+      if (el.dataset.i18nHtml && d[el.dataset.i18nHtml] != null) el.innerHTML = d[el.dataset.i18nHtml];
+      if (el.dataset.i18nAlt && d[el.dataset.i18nAlt] != null) el.alt = d[el.dataset.i18nAlt];
+    });
+    cells.forEach(([td, pl]) => { td.textContent = lang === 'en' ? (CELLS[pl] || pl.replace('polski', 'Polish')) : pl; });
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    const src = 'trailer-' + lang + '.mp4';
+    if (video && !video.src.endsWith(src)) { video.src = src; video.poster = lang === 'en' ? 'img/poster-en.jpg' : 'img/poster.jpg'; }
+    try { localStorage.setItem('kubix-lang', lang); } catch (e) {}
+  }
+
+  let initial = 'pl';
+  try { initial = localStorage.getItem('kubix-lang') || ''; } catch (e) { initial = ''; }
+  if (!initial) initial = (navigator.language || 'pl').toLowerCase().startsWith('pl') ? 'pl' : 'en';
+  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => apply(b.dataset.lang)));
+  if (initial !== 'pl') apply(initial);
+
+  const btns = document.querySelectorAll('.chip-btn');
+  const cards = document.querySelectorAll('#games .game');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    const f = b.dataset.f;
+    cards.forEach(c => { c.hidden = !(f === 'all' || c.dataset.cat === f); });
+  }));
+})();
+</script>
 </body>
 </html>
